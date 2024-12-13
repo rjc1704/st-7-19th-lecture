@@ -1,9 +1,7 @@
+import { getTodos } from "@/api/todo";
+
 export async function GET(request: Request) {
-  const todos = await fetch(`${process.env.JSON_SERVER_URL}/todos`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }).then((res) => res.json());
+  const todos = await getTodos();
 
   return Response.json({ todos });
 }

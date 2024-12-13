@@ -5,22 +5,23 @@ import { useState } from "react";
 
 import { AxiosError } from "axios";
 import { Todo } from "@/types/todo.type";
+import { addTodo } from "@/api/todo";
 
 export default function TodoForm() {
   const [title, setTitle] = useState<string>("");
   const [contents, setContents] = useState<string>("");
 
   const queryClient = useQueryClient();
-  const addMutation = useMutation<Todo, AxiosError, Todo>({
+  const addMutation = useMutation<unknown, AxiosError, Todo>({
     mutationFn: async (newTodo) => {
-      const todo = await fetch("/api/todo", {
-        method: "post",
-        body: JSON.stringify(newTodo),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }).then((res) => res.json());
-      return todo;
+      // (1) 서버 액션
+      await addTodo(newTodo);
+
+      // (2) route handler
+      // await fetch("api/todo", {
+      //   method: "POST",
+      //   body: JSON.stringify(newTodo),
+      // });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });

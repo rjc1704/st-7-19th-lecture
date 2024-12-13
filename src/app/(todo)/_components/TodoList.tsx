@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { Todo } from "@/types/todo.type";
 import TodoItem from "./TodoItem";
+import { getTodos } from "@/api/todo";
 
 export default function TodoList() {
   const {
@@ -13,11 +14,13 @@ export default function TodoList() {
   } = useQuery<Todo[], Error, Todo[], [string]>({
     queryKey: ["todos"],
     queryFn: async () => {
-      const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+      // (1) 서버 액션
+      const todos = await getTodos();
 
-      const { todos } = await fetch(`${BASEURL}/api/todo`).then((res) =>
-        res.json(),
-      );
+      // (2) route handler
+      // const res = await fetch("api/todo");
+      // const { todos } = await res.json();
+
       return todos;
     },
   });

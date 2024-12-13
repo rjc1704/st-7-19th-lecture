@@ -1,19 +1,13 @@
+import { getTodo } from "@/api/todo";
 import HomeButton from "@/components/HomeButton";
 
-export default async function Detail({
-  params: { id },
-}: {
+type Props = {
   params: { id: string };
-}) {
+};
+
+export default async function Detail({ params: { id } }: Props) {
   console.log("Detail 컴포넌트 렌더링");
-  const { todoData: todo } = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/todo/${id}`,
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    },
-  ).then((res) => res.json());
+  const todo = await getTodo(id);
 
   return (
     <div>
